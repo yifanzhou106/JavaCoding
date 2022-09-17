@@ -10,7 +10,7 @@ class KMP:
             self.next[i] = self.rec(i, i, str)
 
     def rec(self, i, j, str):
-        if self.next[i] == -1 or self.next[i - 1] == -1:
+        if self.next[i] == -1 or self.next[j - 1] == -1:
             return 0
         elif str[self.next[i - 1]] == str[j - 1]:
             return self.next[i - 1] + 1
