@@ -62,7 +62,7 @@ s1 = "123+1"
 s2 = "-123+1"
 s3 = '(1+2)*3'
 s4 = "11+2*3+2+16/5+6"
-s5 = "0"
+s5 = "3+3*(6+7*(3+1))+5"
 
 # print(so.calcualteString(s1))
 # print(so.calcualteString(s2))
