@@ -8,23 +8,22 @@ class Solution:
     def findAllSubarrayMaxMinusMinLessThanK(self, nums, k):
         if not nums or not k:
             return 0
-        left = 0
         right = 0
         maxQ = []
         minQ = []
         res = 0
-        while left < len(nums):
+        for i in range (len(nums)):
             while right < len(nums):
                 self.addNums(maxQ, minQ, nums, right)
                 if maxQ[0].val - minQ[0].val > k:
                     break
                 right += 1
-            if maxQ[0].index == left:
+            if maxQ[0].index == i:
                 maxQ.pop(0)
-            if minQ[0].index == left:
+            if minQ[0].index == i:
                 minQ.pop(0)
-            res += right - left
-            left += 1
+            res += right - i
+            i += 1
         return res
 
     def addNums(self, maxQ, minQ, nums, right):
