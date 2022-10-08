@@ -21,7 +21,7 @@ class Solution:
         head2 = head.next
 
         while node:
-            node.next.rand = node.rand.next
+            node.next.rand = node.rand.next if node.rand else None
             node = node.next.next
 
         node = head
