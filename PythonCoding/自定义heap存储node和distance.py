@@ -8,7 +8,7 @@ class CustomHeap:
     def __init__(self, size=0):
         self.nodeIndexMap = {}
         self.distanceMap = {}
-        self.nodeHeap = [None for _in range(size)]
+        self.nodeHeap = [None for _ in range(size)]
         self.size = 0
 
     def swap(self, a, b):
@@ -28,7 +28,7 @@ class CustomHeap:
 
         while left < size:
             smallest = left + 1 if left + 1 < size and self.distanceMap[left] > self.distanceMap[left + 1] else left
-            smallest = smallest if self.distanceMap[smallest] < self.distanceMap[i]
+            smallest = smallest if self.distanceMap[smallest] < self.distanceMap[i] else i
             if smallest == i:
                 break
             self.swap(smallest, i)
