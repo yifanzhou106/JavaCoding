@@ -37,3 +37,42 @@ kmp = KMP()
 str1 = 'ababcababtk'
 str2 = 'caba'
 print(kmp.findSameSubString(str1, str2))
+
+
+class Solution2:
+    def KMP(self, s1, s2):
+        if len(s2) == 0 or len(s1) == 0 or len(s2) > len(s1):
+            return -1
+
+        next = self.findNext(s2)
+
+        j = 0
+        i = 0
+        while i < len(s1):
+            if s1[i] == s2[j]:
+                i += 1
+                j += 1
+            elif j == -1:
+                i += 1
+                j = 0
+            else:
+                j = next[j]
+        return i - j if j == len(s2) else -1
+
+    def findNext(self, s):
+        next = [0 for _ in range(len(s))]
+        next[0] = -1
+
+        for i in range(2, len(s)):
+            cur = i - 1
+            while cur != -1 and s[i - 1] != s[next[cur]]:
+                cur = next[cur]
+            next[i] = 0 if cur == -1 else next[cur] + 1
+        return next
+
+
+so = Solution2()
+s1 = "aabaacaabaak"
+s2 = "aabaak"
+print(so.KMP(s1, s2))
+
