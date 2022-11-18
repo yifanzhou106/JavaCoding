@@ -45,3 +45,51 @@ class Solution:
 so = Solution()
 arr = [4, 6, 8, 2, 3, 4, 5, 6, 123, 3, 77, 34]
 print(so.findMinKth(arr, 6))
+
+# 2刷
+import random
+
+
+class Solution:
+
+    def findKSmallestNumber(self, nums, k):
+        if len(nums) < k:
+            return nums[-1]
+        return self.process(nums, 0, len(nums) - 1, k)
+
+    def process(self, nums, left, right, k):
+        if left == right:
+            return nums[left]
+
+        randIndex = random.randint(left, right)
+        equalRange = self.patition(nums, left, right, nums[randIndex])
+
+        if k >= equalRange[0] and k <= equalRange[1]:
+            return nums[k]
+        elif k < equalRange[0]:
+            return self.process(nums, left, equalRange[0] - 1, k)
+        else:
+            return self.process(nums, equalRange[1] + 1, right, k)
+
+    def patition(self, nums, left, right, m):
+        l = left - 1
+        r = right + 1
+        cur = left
+
+        while cur < r:
+            if nums[cur] < m:
+                nums[l + 1], nums[cur] = nums[cur], nums[l + 1]
+                l += 1
+                cur += 1
+            elif nums[cur] == m:
+                cur += 1
+            else:
+                nums[r - 1], nums[cur] = nums[cur], nums[r - 1]
+                r -= 1
+        return [l + 1, r - 1]
+
+
+so = Solution()
+nums = [5, 9, 8, 2, 1, 4, 6, 2, 7]
+print(so.findKSmallestNumber(nums, 3))
+
