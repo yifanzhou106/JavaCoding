@@ -1,0 +1,73 @@
+class Node:
+    def __init__(self):
+        self.end = None
+        self.next = [None for _ in range(26)]
+        self.jump = None
+        self.canSkip = False
+
+class AC:
+    def __init__(self):
+        self.root = Node()
+
+    def insert(self, str):
+        cur = self.root
+        for i in range(len(str)):
+            index = ord(str[i])-ord('a')
+            if not cur.next[index]:
+                cur.next[index] = Node()
+            cur = cur.next[index]
+            if i == len(str) -1:
+                cur.end = str
+
+    def build(self):
+        q = [self.root]
+        while q:
+            cur = q.pop()
+            for i in range(26):
+                if cur.next[i]:
+                    cur.next[i].jump = self.root
+                    temp = cur.jump
+                    while temp:
+                        if temp.next[i]:
+                            cur.next[i].jump = temp.next[i]
+                            break
+                        temp = temp.jump
+                    q.append(cur.next[i])
+
+    def search(self, longStr):
+        res = []
+        cur = self.root
+        for i in range(len(longStr)):
+            index = ord(longStr[i]) - ord('a')
+            while not cur.next[index] and cur is not self.root:
+                cur = cur.jump
+
+            cur = cur.next[index] if cur.next[index] else self.root
+            follow = cur
+            while follow:
+                if follow.canSkip:
+                    break
+                if follow.end:
+                    res.append(follow.end)
+                    follow.canSkip = True
+                follow = follow.jump
+        return res
+
+
+
+so = AC()
+so.insert("abcd")
+so.insert("abcdz")
+so.insert("bcd")
+so.insert("cd")
+so.insert("abcdtzm")
+so.build()
+print(so.search("abcdtzm"))
+
+
+
+
+
+
+
+
