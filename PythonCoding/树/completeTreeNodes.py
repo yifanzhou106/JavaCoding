@@ -28,3 +28,32 @@ class Solution(object):
             node = node.left
             level += 1
         return level - 1
+
+# 2刷
+class Solution2:
+    def findBalanceTreeNodeCount(self, root):
+        if not root:
+            return 0
+        res = 0
+        node = root
+        level = 1
+        mostLeftHeight = self.findHeight(node, level)
+        while node:
+            right = self.findHeight(node.right, level + 1)
+            if mostLeftHeight == right:
+                res += (1 << (mostLeftHeight - level))
+                level += 1
+                node = node.right
+            elif mostLeftHeight > right:
+                res += (1 << (right - level))
+                level += 1
+                node = node.left
+        return res
+    def findHeight(self, node, level):
+        if not node:
+            return level
+        cur = level
+        while node.left:
+            cur += 1
+            node = node.left
+        return cur
