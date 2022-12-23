@@ -1,9 +1,7 @@
 class Solution:
     # 给定一个arr代表居民房子在x轴上的位置
     # 邮局只能放在居民房子位置，求如果有k个邮局，怎么使得所有居民到邮局的距离最近
-
-    # 总体解法就是0-i的范围上 分成左右两部分，左边0到m-1有j-1个邮局，右边m到i只有一个邮局（这个可以直接得出）
-    def postOffice(self, arr, k):
+    def postOffice1(self, arr, k):
         if len(arr) < 2 or k <= 0:
             return
         # 辅助数组，代表从0到i位置，只有一个邮局的最短距离
@@ -25,8 +23,39 @@ class Solution:
                 # 假如0-i上只用一个邮局，值应该是最大的，设为初始值
                 dp[i][j] = record[0][i]
                 # 0到m-1上有j-1个邮局 + m到i上有一个邮局
-                for m in range(i - 1, -1, -1):
-                    dp[i][j] = min(dp[i][j], dp[m][j - 1] + record[m + 1][i])
+                for m in range(i, 0, -1):
+                    dp[i][j] = min(dp[i][j], dp[m - 1][j - 1] + record[m][i])
+        return dp[-1][-1]
+
+    # 利用四边形不等式优化
+    def postOffice2(self, arr, k):
+        if len(arr) < 2 or k <= 0:
+            return
+        record = self.findRecord(arr)
+        N = len(arr)
+
+        dp = [[0 for _ in range(k + 1)] for _ in range(N)]
+
+        # choose[i][j] 代表dp[i][j]最优的时候，中间枚举的m的位置
+        # 这里因为行列的单调性，我们可以猜 choose[i][j]最优的位置一定在choose[i-1][j] <= choose[i][j] <= choose[i][j+1]
+        choose = [[0 for _ in range(k + 1)] for _ in range(N)]
+        for i in range(N):
+            dp[i][1] = record[0][i]
+            # 0..i 说明 m 的右边没有东西choose[i][1] = 0
+
+        for i in range(1, N):
+            for j in range(min(i, k), 1, -1):
+                # 下限
+                down = choose[i - 1][j]
+                # 上限，注意右边界
+                up = i if j == min(i, k) else choose[i][j + 1]
+
+                dp[i][j] = record[0][i]
+                for m in range(max(1, down), min(i + 1, up + 1)):
+                    if dp[m - 1][j - 1] + record[m][i] < dp[i][j]:
+                        dp[i][j] = dp[m - 1][j - 1] + record[m][i]
+                        choose[i][j] = m
+
         return dp[-1][-1]
 
     def findRecord(self, arr):
@@ -44,4 +73,5 @@ class Solution:
 
 so = Solution()
 arr = [3, 18, 105, 877, 987, 1003]
-print(so.postOffice(arr, 3))
+print(so.postOffice1(arr, 3))
+print(so.postOffice2(arr, 3))
