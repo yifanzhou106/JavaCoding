@@ -1,5 +1,4 @@
-class Solution:
-    # 在两个长度不同的arr中，找到两个arr的共同第k大的数， log min(n,m)
+class Solution(object):
     # 思路： 先要有个方法可以解决两个array中第K大的数字，
     # 这个方法可以分解成三种情况
     # 1. k <= len(short) s
@@ -27,6 +26,29 @@ class Solution:
     # 如果l上的3大于上的5时，l上的3就是第八大，直接返回
     # 否则 l = [4,5,6,7,8] （k-s...k-1）,s=[1,2,3,4,5] (0...s-1)
     # 找中位数得出的是第八大
+    def findMedianSortedArrays(self, nums1, nums2):
+        """
+        :type nums1: List[int]
+        :type nums2: List[int]
+        :rtype: float
+        """
+        n = len(nums1)
+        m = len(nums2)
+        isOdd = ((n + m) & 1) == 1
+        if n == 0 and m == 0:
+            return 0
+        elif n == 0 or m == 0:
+            longArr = nums1 if m == 0 else nums2
+            longLen = len(longArr)
+            return longArr[(longLen - 1) >> 1] if isOdd else float(
+                longArr[longLen >> 1] + longArr[(longLen >> 1) - 1]) / 2
+        if isOdd:
+            print((n + m + 1) >> 1)
+            return self.findKthInTwoArr(nums1, nums2, (n + m + 1) >> 1)
+        else:
+            return float(self.findKthInTwoArr(nums1, nums2, (n + m) >> 1) + self.findKthInTwoArr(nums1, nums2, (
+                        (n + m) >> 1) + 1)) / 2
+
     def findKthInTwoArr(self, arr1, arr2, k):
 
         long = arr1 if len(arr1) > len(arr2) else arr2
@@ -93,27 +115,27 @@ class Solution:
                 return arr1[mid1]
 
 
-arr = [3, 1, 2, 7, 4]
 so = Solution()
-arr1 = [1, 3, 5, 7, 9]
-arr2 = [2, 3, 6, 7, 10]
-print(so.findMidInTwoArr(arr1, 0, 4, arr2, 0, 4))
 
-arr1 = [1, 3, 7, 9]
-arr2 = [2, 4, 6, 10]
-print(so.findMidInTwoArr(arr1, 0, 3, arr2, 0, 3))
+arr1 = [1, 2]
+arr2 = [3, 4]
+print(so.findMedianSortedArrays(arr1, arr2))
 
-arr1 = [1, 3]
-arr2 = [2]
-print(so.findKthInTwoArr(arr1, arr2, 2))
-print("*********")
-arr1 = [1, 3, 7, 9, 11, 14, 16, 18, 22]
-arr2 = [2, 4, 6, 10, 17, 25, 30]
-print(so.findKthInTwoArr(arr1, arr2, 10))  # 14
-print(so.findKthInTwoArr(arr1, arr2, 12))  # 17
-print(so.findKthInTwoArr(arr1, arr2, 8))  # 10
-print(so.findKthInTwoArr(arr1, arr2, 4))  # 4
+arr1 = []
+arr2 = [3]
+print(so.findMedianSortedArrays(arr1, arr2))
 
+arr1 = []
+arr2 = [1, 2, 3, 4, 5, 6]
+print(so.findMedianSortedArrays(arr1, arr2))
+
+arr1 = [1, 2]
+arr2 = [1, 2, 3]
+print(so.findMedianSortedArrays(arr1, arr2))
+
+arr1 = [2]
+arr2 = [1, 3, 4]
+print(so.findMedianSortedArrays(arr1, arr2))
 
 
 

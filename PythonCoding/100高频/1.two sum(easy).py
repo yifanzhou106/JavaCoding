@@ -1,5 +1,8 @@
 class Solution:
     # 返回index
+    # 使用一个map来记录当前i位置数字的位置
+    # t-arr[i] 查看是否之前有过另一个数字出现过
+    # 如果有的话，答案填上一笔
     def twoSum2(self, arr, t):
         map = {}
         res = []
