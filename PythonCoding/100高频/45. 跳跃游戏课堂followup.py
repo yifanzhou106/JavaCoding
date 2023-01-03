@@ -26,7 +26,38 @@ class Solution:
                     levelMap[right] = level + 1
         return -1
 
+    # 用dp来做， 假设最大步数小于arr长度-1
+    # 因为假设要从start到end，最少距离的话，不会走重复的点
+    # 所以从start到end最大的步数是arr长度-2
+    def jumpGameFollowUp2(self, arr, start, end):
+        return self.process(arr, end, start, 0)
+
+    def process(self, arr, end, cur, k):
+        if cur < 0:
+            return -1
+        if cur >= len(arr):
+            return -1
+        if k >= len(arr) - 1:
+            return -1
+        if cur == end:
+            return k
+        left = cur - arr[cur]
+        right = cur + arr[cur]
+
+        p1 = self.process(arr, end, left, k + 1)
+        p2 = self.process(arr, end, right, k + 1)
+
+        ans = -1
+        if p1 != -1 and p2 != -1:
+            ans = min(p1, p2)
+        elif p1 != -1:
+            ans = p1
+        elif p2 != -1:
+            ans = p2
+        return ans
+
 
 so = Solution()
 arr = [7, 2, 1, 3, 1, 4, 2, 1]
 print(so.jumpGameFollowUp(arr, 3, 7))
+print(so.jumpGameFollowUp2(arr, 3, 7))
